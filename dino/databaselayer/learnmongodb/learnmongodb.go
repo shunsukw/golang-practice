@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"gopkg.in/mgo.v2"
@@ -69,11 +70,11 @@ func main() {
 		},
 	}
 	results := []animal{}
-	animalcollection.Find(query).All(&results) //.one
+	animalCollection.Find(query).All(&results) //.one
 	fmt.Println(results)
 
 	//one result
 	result := animal{}
-	animalcollection.Find(query).One(&result)
+	animalCollection.Find(query).One(&result)
 	fmt.Println(result)
 }
