@@ -12,9 +12,9 @@ type PQHandler struct {
 
 func NewPQHandler(connection string) (*PQHandler, error) {
 	db, err := sql.Open("postgres", connection)
-	return &PostgreSQLHandler{
+	return &PQHandler{
 		SQLHandler: &SQLHandler{
-			DB: db
-		}
+			DB: db,
+		},
 	}, err
 }

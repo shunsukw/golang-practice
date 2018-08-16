@@ -3,6 +3,7 @@ package databaselayer
 import (
 	"database/sql"
 	"fmt"
+	"log"
 )
 
 type SQLHandler struct {
@@ -10,11 +11,11 @@ type SQLHandler struct {
 }
 
 func (handler *SQLHandler) GetAvailableDinos() ([]Animal, error) {
-	handler.sendQuery("select * from Animals")
+	return handler.sendQuery("select * from Animals")
 }
 
 func (handler *SQLHandler) GetDinoByNickname(nickname string) (Animal, error) {
-	row := handler.QueryRow(fmt.Printf("select * from Animals where nickname = '%s'", nickname))
+	row := handler.QueryRow(fmt.Sprintf("select * from Animals where nickname = '%s'", nickname))
 	a := Animal{}
 	err := row.Scan(&a.ID, &a.AnimalType, &a.Nickname, &a.Zone, &a.Age)
 	return a, err
@@ -30,12 +31,12 @@ func (handler *SQLHandler) AddAnimal(a Animal) error {
 }
 
 func (handler *SQLHandler) UpdateAnimal(a Animal, nname string) error {
-	_, err := handler.Exec(fmt.Sprintlf("Update Animals set Animal_type = '%s', nickname = '%s', zone = %d, age = %d where nickname = '%s'"), a.AnimalType, a.Nickname, a.Zone, a.Age, nname)
+	_, err := handler.Exec(fmt.Sprintf("Update Animals set Animal_type = '%s', nickname = '%s', zone = %d, age = %d where nickname = '%s'"), a.AnimalType, a.Nickname, a.Zone, a.Age, nname)
 	return err
 }
 
 func (handler *SQLHandler) sendQuery(q string) ([]Animal, error) {
-	Animals := []Animal
+	Animals := []Animal{}
 	rows, err := handler.Query(q)
 	if err != nil {
 		return nil, err
@@ -43,7 +44,7 @@ func (handler *SQLHandler) sendQuery(q string) ([]Animal, error) {
 
 	for rows.Next() {
 		a := Animal{}
-		err := row.Scan(&a.ID, &a.AnimalType, &a.Nickname, &a.Zone, &a.Age)
+		err := rows.Scan(&a.ID, &a.AnimalType, &a.Nickname, &a.Zone, &a.Age)
 		if err != nil {
 			log.Println(err)
 			continue

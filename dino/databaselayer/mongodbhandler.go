@@ -16,7 +16,7 @@ func NewMongodbHandler(connection string) (*MongodbHandler, error) {
 	}, err
 }
 
-func (handler *MongodbHandler) GetAvailableDynos() ([]Animal, error) {
+func (handler *MongodbHandler) GetAvailableDinos() ([]Animal, error) {
 	s := handler.getFreshSession()
 	defer s.Close()
 	animals := []Animal{}
@@ -24,7 +24,7 @@ func (handler *MongodbHandler) GetAvailableDynos() ([]Animal, error) {
 	return animals, err
 }
 
-func (handler *MongodbHandler) GetDynoByNickname(nickname string) (Animal, error) {
+func (handler *MongodbHandler) GetDinoByNickname(nickname string) (Animal, error) {
 	s := handler.getFreshSession()
 	defer s.Close()
 	a := Animal{}
@@ -32,7 +32,7 @@ func (handler *MongodbHandler) GetDynoByNickname(nickname string) (Animal, error
 	return a, err
 }
 
-func (handler *MongodbHandler) GetDynosByType(dinoType string) ([]Animal, error) {
+func (handler *MongodbHandler) GetDinosByType(dinoType string) ([]Animal, error) {
 	s := handler.getFreshSession()
 	defer s.Close()
 	animals := []Animal{}
