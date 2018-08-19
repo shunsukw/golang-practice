@@ -29,7 +29,7 @@ type Animal struct {
 	Age        int    `bson:"age"`
 }
 
-func getDatabaseHandler(dbtype uint8, connection string) (DinoDBHandler, error) {
+func GetDatabaseHandler(dbtype uint8, connection string) (DinoDBHandler, error) {
 	switch dbtype {
 	case MYSQL:
 		return NewMySQLHandler(connection)
