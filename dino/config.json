@@ -1,3 +1,6 @@
 {
-    "webserver": "localhost:8787"
+    "webserver": "localhost:8181",
+    "databasetype": 3,
+    "dbconnection": "mongodb://127.0.0.1",
+    "frontend": "./dinowebportal/dinoTemplate/"
 }
