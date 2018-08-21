@@ -3,6 +3,7 @@ package dinoapi
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -63,4 +64,33 @@ func (handler *DinoRESTAPIHandler) searchHandler(w http.ResponseWriter, r *http.
 }
 
 func (handler *DinoRESTAPIHandler) editsHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	operation, ok := vars["Operation"]
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, `Operation was not provided, you can either use /api/dinos/add to add a new animal, or
+						/api/dinos/edit/rex to edit an existing animal data with nickname rex`)
+		return
+	}
+
+	var animal databaselayer.Animal
+	err := json.NewDecoder(r.Body).Decode(&animal)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Could not docode the request body to json %v", err)
+		return
+	}
+	switch strings.ToLower(operation) {
+	case "add":
+		err = handler.dbhandler.AddAnimal(animal)
+	case "edit":
+		//api/dinos/edit/rex
+		nickname := r.RequestURI[len("/api/dinos/edit/"):]
+		log.Println("edit requested for nickname", nickname)
+		err = handler.dbhandler.UpdateAnimal(animal, nickname)
+	}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "Error occured while processing request %v", err)
+	}
 }
